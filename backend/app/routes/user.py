@@ -11,7 +11,7 @@ router = APIRouter(
   responses={404: {"description": "Not found"}}
 )
 
-@router.post('/users', status_code=status.HTTP_201_CREATED)
+@router.post('/register', status_code=status.HTTP_201_CREATED)
 async def create_user(user: UserCreate, db: Session =Depends(get_db)):
   try:
     existing_user = db.query(User).filter(User.email == user.email).first()
