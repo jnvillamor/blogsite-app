@@ -1,4 +1,7 @@
 from passlib.context import CryptContext
+from datetime import datetime, timedelta, timezone
+import os
+import jwt
 
 # Create a password context with bcrypt scheme
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")

@@ -1,1 +1,1 @@
-from .index import hash_password, verify_password
+from .hashing import hash_password, verify_password
