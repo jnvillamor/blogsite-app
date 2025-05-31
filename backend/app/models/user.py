@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Integer, String, DateTime, func
+from sqlalchemy.orm import relationship
 from app.core.database import Base
 
 class User(Base):
@@ -11,6 +12,8 @@ class User(Base):
   password = Column(String(250), nullable=False)
   created_at = Column(DateTime(timezone=True), default=func.now(), nullable=False)
   updated_at = Column(DateTime(timezone=True), default=func.now(), onupdate=func.now(), nullable=False)
+
+  blogs = relationship("Blog", back_populates="author", cascade="all, delete-orphan")
 
   def __repr__(self):
     return f"<User(id={self.id}, email={self.email}, first_name={self.first_name}, last_name={self.last_name})>"
