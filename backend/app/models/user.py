@@ -8,6 +8,6 @@ class User(Base):
   email = Column(String(100), unique=True, index=True, nullable=False)
   first_name = Column(String(50), nullable=False)
   last_name = Column(String(50), nullable=False)
-  hashed_password = Column(String(250), nullable=False)
+  password = Column(String(250), nullable=False)
   created_at = Column(DateTime(timezone=True), default=func.now(), nullable=False)
   updated_at = Column(DateTime(timezone=True), default=func.now(), onupdate=func.now(), nullable=False)
