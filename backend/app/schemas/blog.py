@@ -1,10 +1,11 @@
 from pydantic import BaseModel, Field
+from app.schemas import Author
 
 class BlogBase(BaseModel):
   id: int
   title: str
   content: str
-  author_id: int 
+  author: Author
 
   model_config = { "from_attributes": True }
 

@@ -10,7 +10,7 @@ router = APIRouter(
   tags=["blogs"],
 )
 
-@router.post("/blogs", response_model=BlogBase, status_code=status.HTTP_201_CREATED)
+@router.post("/", response_model=BlogBase, status_code=status.HTTP_201_CREATED)
 async def create_blog(
   blog: BlogCreate,
   db: Session = Depends(get_db),
@@ -35,4 +35,12 @@ async def create_blog(
   db.refresh(new_blog)
 
   return BlogBase.model_validate(new_blog).model_dump()
-  
+
+@router.get("/", response_model=list[BlogBase])
+async def get_blogs(
+  db: Session = Depends(get_db),
+  page: int = 1,
+  limit: int = 10
+):
+  blogs = db.query(Blog).offset((page - 1) * limit).limit(limit).all()
+  return [BlogBase.model_validate(blog).model_dump() for blog in blogs]
