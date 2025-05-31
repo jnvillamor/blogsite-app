@@ -1,8 +1,9 @@
 from app.core.database import get_db
 from app.models.user import User
 from app.schemas import UserBase, UserCreate, UserRead
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
+from app.utils import hash_password
 
 router = APIRouter(
   prefix="/auth",
@@ -10,14 +11,23 @@ router = APIRouter(
   responses={404: {"description": "Not found"}}
 )
 
-@router.post('/users')
+@router.post('/users', status_code=status.HTTP_201_CREATED)
 async def create_user(user: UserCreate, db: Session =Depends(get_db)):
-  existing_user = db.query(User).filter(User.email == user.email).first()
+  try:
+    existing_user = db.query(User).filter(User.email == user.email).first()
 
-  if existing_user:
-    raise HTTPException(status_code=400, detail="Email already registered")
-  
-  return {
-    "message": "User created successfully",
-    "user": user
-  }
+    if existing_user:
+      raise HTTPException(status_code=400, detail="Email already registered")
+    
+    hashed_password = hash_password(user.password)
+    user.password = hashed_password
+
+    new_user = User(**user.model_dump())
+    db.add(new_user)
+    db.commit()
+    db.refresh(new_user)
+
+    return UserRead.model_validate(new_user).model_dump()
+  except Exception as e:
+    print(f"Error creating user: {e}", flush=True)
+    raise HTTPException(status_code=500, detail="Internal server error")

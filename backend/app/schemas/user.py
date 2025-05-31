@@ -1,4 +1,5 @@
 from pydantic import Field, EmailStr, BaseModel, computed_field
+from datetime import datetime
 
 class UserBase(BaseModel):
   email: EmailStr = Field(..., max_length=100)
@@ -18,10 +19,14 @@ class UserCreate(UserBase):
 
 class UserRead(UserBase):
   id: int 
-  created_at: str
-  updated_at: str
+  created_at: datetime
+  updated_at: datetime
 
   @computed_field
   @property
   def full_name(self) -> str:
     return f"{self.first_name} {self.last_name}"
+
+  model_config = {
+    'from_attributes': True,
+  }
