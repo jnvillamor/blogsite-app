@@ -6,5 +6,5 @@ class TokenSchema(BaseModel):
   refresh_token: str
 
 class TokenPayload(BaseModel):
-  sub: str
+  sub: int
   exp: datetime
