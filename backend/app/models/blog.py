@@ -10,7 +10,7 @@ class Blog(Base):
   content = Column(Text, nullable=False)
   author_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
 
-  author = relationship("User", back_populates="blogs", cascade="all, delete-orphan")
+  author = relationship("User", back_populates="blogs")
 
   def __repr__(self):
     return f"<Blog(id={self.id}, title={self.title}, author_id={self.author_id})>"
