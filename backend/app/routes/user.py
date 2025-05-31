@@ -31,3 +31,16 @@ async def create_user(user: UserCreate, db: Session =Depends(get_db)):
   except Exception as e:
     print(f"Error creating user: {e}", flush=True)
     raise HTTPException(status_code=500, detail="Internal server error")
+  
+@router.get('/users/{user_id}', response_model=UserRead, status_code=status.HTTP_200_OK)
+def get_user(user_id: int, db: Session = Depends(get_db)):
+  try:
+    user = db.query(User).filter(User.id == user_id).first()
+    
+    if not user:
+      raise HTTPException(status_code=404, detail="User not found")
+    
+    return UserRead.model_validate(user).model_dump()
+  except Exception as e:
+    print(f"Error retrieving user: {e}", flush=True)
+    raise HTTPException(status_code=500, detail="Internal server error")
