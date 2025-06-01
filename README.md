@@ -66,7 +66,7 @@ git clone https://github.com/jnvillamor/blogsite-app.git
 cd blogsite-app
 ```
 
-### ▶️ Running the App
+### ▶ Running the App
 Build and start the containers:
 ```bash
 docker-compose up --build
