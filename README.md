@@ -8,6 +8,7 @@ A simple and modern blog site built with FastAPI, PostgreSQL, and a Next.js fron
 - [About](#-about)
 - [Tech Stack](#-tech-stack)
 - [Project Structure](#-project-structure)
+- [Environment Variables](#-environment-variables)
 - [Getting Started](#-getting-started)
   - [Prerequisites](#-prerequisites)
   - [Installation](#-installation)
@@ -16,7 +17,6 @@ A simple and modern blog site built with FastAPI, PostgreSQL, and a Next.js fron
   - [Seeding Data](#-seeding-data)
 - [Usage](#-usage)
 - [API Documentation](#-api-documentation)
-- [Environment Variables](#-environment-variables)
 
 ---
 
@@ -46,6 +46,29 @@ It is designed to be lightweight and developer-friendly, leveraging FastAPI for 
 ---
 ## 📁 Project Structure
 ![image](https://github.com/user-attachments/assets/f2adc8ec-2a06-4be9-a084-4bc4b0a0ab35)
+
+---
+
+## 🔧 Environment Variables
+You can manage configuration through `.env` files.
+
+🔑 To generate secret key, you can use `openssl`.
+```bash
+openssl rand -base64 32
+```
+
+📂 Example for `backend/.env`:
+```bash
+DATABASE_URL=postgresql://<username>:<password>@<host>:<port>/<database>
+SECRET_KEY=your_secret_key
+REFRESH_SECRET_KEY=your_secret_key
+ALGORITHM=HS256
+```
+📂 Example for `frontend/.env`:
+```bash
+API_URL="http://<host | docker_service_name>:8000"
+```
+For this project, the environment variables needed for the frontend is already define in the `docker-compose.yml` file.
 
 ---
 
@@ -110,6 +133,17 @@ Once the app is running:
 - Create and manage your blog posts
 - View blog content from other users
 
+The seed will populate the database with these dummy accounts:
+- User(first_name='Alice', last_name='Smith', email='alicesmith@example.com', password=hash_password('password123'))
+- User(first_name='Bob', last_name='Johnson',email='bobjohnson@example.com', password=hash_password('password123')),
+- User(first_name='Charlie', last_name='Brown', email='charliebrown@example.com', password=hash_password('password123')),
+- User(first_name='Diana', last_name='Prince', email='dianaprince@example.com', password=hash_password('password123')),
+- User(first_name='Ethan', last_name='Hunt', email='ethanhunt@example.com', password=hash_password('password123'))
+
+You can use these credentials to login.
+
+---
+
 ## 🧾 API Documentation
 
 FastAPI provides built-in, interactive API docs:
@@ -118,24 +152,3 @@ FastAPI provides built-in, interactive API docs:
 - ReDoc: http://localhost:8000/redoc
 
 You can explore, test, and debug all API endpoints from here.
-
-## 🔧 Environment Variables
-You can manage configuration through `.env` files.
-
-🔑 To generate secret key, you can use `openssl`.
-```bash
-openssl rand -base64 32
-```
-
-📂 Example for `backend/.env`:
-```bash
-DATABASE_URL=postgresql://<username>:<password>@<host>:<port>/<database>
-SECRET_KEY=your_secret_key
-REFRESH_SECRET_KEY=your_secret_key
-ALGORITHM=HS256
-```
-📂 Example for `frontend/.env`:
-```bash
-API_URL="http://<host | docker_service_name>:8000"
-```
-For this project, the environment variables needed for the frontend is already define in the `docker-compose.yml` file.
