@@ -76,7 +76,7 @@ This starts:
 - 🎨 Next.js frontend at http://localhost:3000
 
 
-### 🛠️ Database Migrations
+### 🛠 Database Migrations
 
 This project uses Alembic for managing database schema changes.
 
