@@ -40,7 +40,7 @@ const CreateBlogForm = ({ current_user_id }: { current_user_id: number }) => {
 
     toast.success('Blog post created successfully!');
     setTimeout(() => {
-      window.location.href = '/';
+      window.location.href = `/profile/${current_user_id}`;
     }, 750);
   };
 
