@@ -9,3 +9,4 @@ alembic
 python-dotenv
 passlib[bcrypt]
 python-multipart
+Faker
