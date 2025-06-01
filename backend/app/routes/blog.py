@@ -2,8 +2,9 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from app.core.database import get_db
 from app.models import Blog, User
-from app.schemas import BlogBase, BlogCreate
+from app.schemas import BlogBase, BlogCreate, PaginatedBlogs
 from app.dependencies import get_current_user
+from math import ceil
 
 router = APIRouter(
   prefix="/blogs",
@@ -36,11 +37,23 @@ async def create_blog(
 
   return BlogBase.model_validate(new_blog).model_dump()
 
-@router.get("/", response_model=list[BlogBase])
+@router.get("/", response_model=PaginatedBlogs)
 async def get_blogs(
   db: Session = Depends(get_db),
   page: int = 1,
   limit: int = 10
 ):
-  blogs = db.query(Blog).offset((page - 1) * limit).limit(limit).all()
-  return [BlogBase.model_validate(blog).model_dump() for blog in blogs]
+  offset = (page - 1) * limit
+  total = db.query(Blog).count()
+  max_page = ceil(total / limit) if total else 1
+  blogs = db.query(Blog).offset(offset).limit(limit).all()
+
+  paginated_blogs = PaginatedBlogs(
+    total=total,
+    page=page,
+    limit=limit,
+    max_page=max_page,
+    blogs=[BlogBase.model_validate(blog).model_dump() for blog in blogs]
+  )
+
+  return paginated_blogs.model_dump()
