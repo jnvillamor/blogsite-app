@@ -14,7 +14,7 @@ const BlogPage = async ({ params }: { params: Promise<{ blog_id: number }> }) =>
     return (
       <div className='container mx-auto px-4 py-8 text-center'>
         <h1 className='text-2xl font-bold mb-4'>Post Not Found</h1>
-        <p className='text-muted-foreground mb-4'>The blog post you're looking for doesn't exist.</p>
+        <p className='text-muted-foreground mb-4'>The blog post you&apos;re looking for doesn&apos;t exist.</p>
         <Button asChild>
           <Link href='/'>Back to Home</Link>
         </Button>

@@ -20,7 +20,7 @@ const Profile = async ({ params }: { params: Promise<{ user_id: number }> }) => 
     return (
       <div className='container mx-auto px-4 py-8 text-center'>
         <h1 className='text-2xl font-bold mb-4'>User Not Found</h1>
-        <p className='text-muted-foreground mb-4'>The user profile you're looking for doesn't exist.</p>
+        <p className='text-muted-foreground mb-4'>The user profile you&apos;re looking for doesn&apos;t exist.</p>
         <Button asChild>
           <Link href='/'>Back to Home</Link>
         </Button>
