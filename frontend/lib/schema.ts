@@ -27,3 +27,9 @@ export const SignupSchema = z.object({
   message: 'Passwords do not match',
   path: ['confirm_password']
 });
+
+export const CreateBlogSchema = z.object({
+  title: z.string().nonempty('Title is required').max(255, 'Title must be at most 250 characters long.'),
+  content: z.string().nonempty('Content is required').max(5000, 'Content must be at most 5000 characters long.'),
+  author_id: z.number().int().positive('Author ID must be a positive integer')
+})

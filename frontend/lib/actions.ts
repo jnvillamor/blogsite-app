@@ -1,7 +1,7 @@
 'use server';
 
 import { z } from "zod";
-import { LoginSchema, SignupSchema } from "./schema";
+import { CreateBlogSchema, LoginSchema, SignupSchema } from "./schema";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -64,4 +64,44 @@ export const loginAction = async (data: z.infer<typeof LoginSchema>) => {
   cookieStore.set('access_token', result.access_token);
   cookieStore.set('refresh_token', result.refresh_token);
   redirect('/');
+}
+
+export const createBlogAction = async (data: z.infer<typeof CreateBlogSchema>) => {
+  const cookieStore = await cookies();
+  const token = cookieStore.get('access_token')?.value;
+
+  console.log(data);
+  
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+    "Authorization": `Bearer ${token}`,
+  };
+
+  try {
+    const res = await fetch(`${API_ENDPOINT}/blogs`, {
+      method: "POST",
+      headers: headers,
+      body: JSON.stringify(data),
+    })
+
+    if (!res.ok) {
+      const errorData = await res.json();
+      return {
+        'error': true,
+        'message': errorData.detail || 'Failed to create blog post.'
+      }
+    }
+
+    return {
+      'error': false,
+      'message': 'Blog post created successfully!'
+    };
+  }
+  catch (error) {
+    console.error('Error creating blog post:', error);
+    return {
+      'error': true,
+      'message': 'Failed to create blog post. Please try again later.'
+    }
+  }
 }
