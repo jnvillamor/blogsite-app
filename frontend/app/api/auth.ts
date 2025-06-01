@@ -22,8 +22,6 @@ export const getCurrentSession = async () => {
       credentials: 'include'
     });
 
-    console.log('Response from /auth/me:', res);
-
     if (!res.ok) {
       const errorData = await res.json();
       console.log('Error fetching session:', errorData);
@@ -37,3 +35,22 @@ export const getCurrentSession = async () => {
     return null;
   }
 };
+
+export const getUserById = async (userId: number) => {
+  try {
+    const res = await fetch(`${API_ENDPOINT}/auth/users/${userId}`)
+
+    if (!res.ok) {
+      const errorData = await res.json();
+      console.log('Error fetching user:', errorData);
+      return null;
+    }
+
+    const data = await res.json();
+    return data;
+  }
+  catch (error) {
+    console.log('Error fetching user:', error);
+    return null;
+  }
+}

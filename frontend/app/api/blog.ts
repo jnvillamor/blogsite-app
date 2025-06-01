@@ -1,5 +1,7 @@
 'use server'
 
+import { cookies } from "next/headers";
+
 const API_ENDPOINT = process.env.API_URL;
 
 export const getBlogPosts = async (page: number, limit: number) => {
@@ -22,18 +24,53 @@ export const getBlogPosts = async (page: number, limit: number) => {
 }
 
 export const getBlogPostById = async (blogId: number) => {
-  const res = await fetch(`${API_ENDPOINT}/blogs/${blogId}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    cache: 'no-store',
-  })
+  try {
+    const res = await fetch(`${API_ENDPOINT}/blogs/${blogId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      cache: 'no-store',
+    })
 
-  if (!res.ok) {
-    throw new Error('Failed to fetch blog post');
+    if (!res.ok) {
+      throw new Error('Failed to fetch blog post');
+    }
+
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.error('Error fetching blog post:', error);
+    throw error;
+  }
+}
+
+export const deleteBlogPost = async (blogId: number) => {
+  const cookieStore = await cookies();
+  const token = cookieStore.get('access_token')?.value;
+
+  const headers = {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${token}`,
   }
 
-  const data = await res.json();
-  return data;
+  try { 
+    const res = await fetch(`${API_ENDPOINT}/blogs/${blogId}`, {
+      method: 'DELETE',
+      headers: headers,
+      cache: 'no-store',
+    });
+
+    if (!res.ok) {
+      const errorData = await res.json();
+      console.log('Error deleting blog post:', errorData);
+      return { success: false, error: errorData.detail || 'Failed to delete blog post' };
+    }
+
+    return { success: true };
+  }
+  catch (error) {
+    console.error('Error deleting blog post:', error);
+    return { success: false, error: 'An unexpected error occurred' };
+  }
 }

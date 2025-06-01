@@ -19,7 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en'>
-      <body className={`${inter.className} antialiased`}>
+      <body className={`${inter.className} antialiased min-h-screen bg-background`}>
         <main>{children}</main>
         <Toaster richColors position='top-center' />
       </body>

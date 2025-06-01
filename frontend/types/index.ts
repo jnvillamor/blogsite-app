@@ -1,13 +1,17 @@
 export interface User {
-  id: string;
+  id: number;
   first_name: string;
   last_name: string;
   email: string;
   full_name: string;
+  created_at: string;
+  updated_at: string;
+  blogs: BlogPost[];
+  blog_count: number;
 }
 
 export interface BlogPost {
-  id: string;
+  id: number;
   title: string;
   content: string;
   created_at: string;
