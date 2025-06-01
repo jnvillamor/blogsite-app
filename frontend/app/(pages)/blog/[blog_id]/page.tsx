@@ -59,7 +59,7 @@ const BlogPage = async ({ params }: { params: Promise<{ blog_id: number }> }) =>
           </p>
         </div>
         <Button asChild variant='outline'>
-          <Link href='/profile/john-doe'>View Profile</Link>
+          <Link href={`/profile/${blog.author.id}`}>View Profile</Link>
         </Button>
       </div>
     </div>
