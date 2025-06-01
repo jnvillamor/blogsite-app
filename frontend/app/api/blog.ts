@@ -4,8 +4,14 @@ import { cookies } from "next/headers";
 
 const API_ENDPOINT = process.env.API_URL;
 
-export const getBlogPosts = async (page: number, limit: number) => {
-  const response = await fetch(`${API_ENDPOINT}/blogs?page=${page}&limit=${limit}`, {
+export const getBlogPosts = async (page: number, limit: number, filters?: {[key: string]: string | string[] | undefined}) => {
+  const params = new URLSearchParams({
+    page: page.toString(),
+    limit: limit.toString(),
+    title: filters?.title ? filters.title.toString() : '',
+  })
+
+  const response = await fetch(`${API_ENDPOINT}/blogs?${params}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -13,10 +19,9 @@ export const getBlogPosts = async (page: number, limit: number) => {
     cache: 'no-store',
   });
 
-  console.log('Fetching blog posts from:', `${API_ENDPOINT}/blog/posts?page=${page}&limit=${limit}`);
-
   if (!response.ok) {
-    throw new Error('Failed to fetch blog posts');
+   console.log('Error fetching blog posts:', response.statusText);
+   return null;
   }
 
   const data = await response.json();

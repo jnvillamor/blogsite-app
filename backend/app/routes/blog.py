@@ -5,6 +5,7 @@ from app.models import Blog, User
 from app.schemas import BlogCreate, PaginatedBlogs, BlogRead
 from app.dependencies import get_current_user
 from math import ceil
+from typing import Optional
 
 router = APIRouter(
   prefix="/blogs",
@@ -41,22 +42,31 @@ async def create_blog(
 async def get_blogs(
   db: Session = Depends(get_db),
   page: int = 1,
-  limit: int = 10
+  limit: int = 10,
+  title: Optional[str] = None,
 ):
-  offset = (page - 1) * limit
-  total = db.query(Blog).count()
-  max_page = ceil(total / limit) if total else 1
-  blogs = db.query(Blog).offset(offset).limit(limit).all()
+  try:
+    offset = (page - 1) * limit
+    blogs = db.query(Blog)
+    
+    if title and title != "":
+      blogs = blogs.filter(Blog.title.ilike(f"%{title}%"))
 
-  paginated_blogs = PaginatedBlogs(
-    total=total,
-    page=page,
-    limit=limit,
-    max_page=max_page,
-    data=[BlogRead.model_validate(blog).model_dump() for blog in blogs]
-  )
+    blogs = blogs.offset(offset).limit(limit).all()
+    total = len(blogs)
+    max_page = ceil(total / limit) if total > 0 else 1
 
-  return paginated_blogs.model_dump()
+    paginated_blogs = PaginatedBlogs(
+      total=total,
+      page=page,
+      limit=limit,
+      max_page=max_page,
+      data=[BlogRead.model_validate(blog).model_dump() for blog in blogs]
+    )
+
+    return paginated_blogs.model_dump()
+  except Exception as e:
+    print(f"Error fetching blogs: {e}", flush=True)
 
 @router.get("/{blog_id}", response_model=BlogRead, status_code=status.HTTP_200_OK)
 async def get_blog(
