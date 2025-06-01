@@ -95,3 +95,30 @@ async def delete_blog(
   db.commit()
 
   return {"detail": "Blog deleted successfully"}
+
+@router.put("/{blog_id}", response_model=BlogBase, status_code=status.HTTP_200_OK)
+async def update_blog(
+  blog: BlogCreate,
+  blog_id: int,
+  db: Session = Depends(get_db),
+  current_user: User = Depends(get_current_user),
+):
+  existing_blog = db.query(Blog).filter(Blog.id == blog_id).first()
+  if not existing_blog:
+    raise HTTPException(
+      status_code=status.HTTP_404_NOT_FOUND,
+      detail="Blog not found"
+    )
+
+  if existing_blog.author_id != current_user.id:
+    raise HTTPException(
+      status_code=status.HTTP_403_FORBIDDEN,
+      detail="You do not have permission to update this blog"
+    )
+  
+  db.query(Blog).filter(Blog.id == blog_id).update(blog.model_dump())
+  db.commit()
+  db.refresh(existing_blog)
+
+  return BlogBase.model_validate(existing_blog).model_dump()
+  
