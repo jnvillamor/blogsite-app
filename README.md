@@ -5,18 +5,18 @@ A simple and modern blog site built with FastAPI, PostgreSQL, and a Next.js fron
 ---
 
 ## 📚 Table of Contents
-- [About](#-about)
-- [Tech Stack](#-tech-stack)
-- [Project Structure](#-project-structure)
-- [Getting Started](#-getting-started)
-  - [Prerequisites](#-prerequisites)
-  - [Installation](#-installation)
-  - [Running the App](#-running-the-app)
-  - [Database Migrations](#-database-migrations)
-  - [Seeding Data](#-seeding-data)
-- [Usage](#-usage)
-- [API Documentation](#-api-documentation)
-- [Environment Variables](#-environment-variables)
+- [About](#about)
+- [Tech Stack](#tech-stack)
+- [Project Structure](#project-structure)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+  - [Running the App](#running-the-app)
+  - [Database Migrations](#database-migrations)
+  - [Seeding Data](#seeding-data)
+- [Usage](#usage)
+- [API Documentation](#api-documentation)
+- [Environment Variables](#environment-variables)
 
 ---
 
@@ -43,6 +43,7 @@ It is designed to be lightweight and developer-friendly, leveraging FastAPI for 
 
 ---
 ## 📁 Project Structure
+![image](https://github.com/user-attachments/assets/f2adc8ec-2a06-4be9-a084-4bc4b0a0ab35)
 
 ## 🚀 Getting Started
 
