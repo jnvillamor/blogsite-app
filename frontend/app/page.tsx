@@ -13,7 +13,7 @@ async function Blogs({ blogPosts }: { blogPosts: PaginatedResponse<BlogPost> }) 
             <Card key={post.id} className='hover:shadow-lg transition-shadow'>
               <CardHeader>
                 <CardTitle className='line-clamp-2'>
-                  <Link href={`/post/${post.id}`} className='hover:underline'>
+                  <Link href={`/blog/${post.id}`} className='hover:underline'>
                     {post.title}
                   </Link>
                 </CardTitle>
