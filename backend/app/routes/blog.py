@@ -52,8 +52,8 @@ async def get_blogs(
     if title and title != "":
       blogs = blogs.filter(Blog.title.ilike(f"%{title}%"))
 
+    total = blogs.count()
     blogs = blogs.offset(offset).limit(limit).all()
-    total = len(blogs)
     max_page = ceil(total / limit) if total > 0 else 1
 
     paginated_blogs = PaginatedBlogs(
