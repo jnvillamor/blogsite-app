@@ -40,3 +40,13 @@ class PaginatedBlogs(BaseModel):
   @property
   def has_prev(self) -> bool:
     return self.page > 1
+  
+  @computed_field
+  @property
+  def next_page(self) -> int | None:
+    return self.page + 1 if self.has_next else None
+  
+  @computed_field
+  @property
+  def prev_page(self) -> int | None:
+    return self.page - 1 if self.has_prev else None
