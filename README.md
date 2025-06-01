@@ -32,7 +32,9 @@ It is designed to be lightweight and developer-friendly, leveraging FastAPI for 
 
 ---
 
+
 ## ⚙️ Tech Stack
+
 
 - **Frontend**: [Next.js](https://nextjs.org/) + [TypeScript](https://www.typescriptlang.org/) + [Tailwind CSS](https://tailwindcss.com/)
 - **Backend**: [FastAPI](https://fastapi.tiangolo.com/) + [PostgreSQL](https://www.postgresql.org/)
@@ -45,7 +47,10 @@ It is designed to be lightweight and developer-friendly, leveraging FastAPI for 
 ## 📁 Project Structure
 ![image](https://github.com/user-attachments/assets/f2adc8ec-2a06-4be9-a084-4bc4b0a0ab35)
 
+---
+
 ## 🚀 Getting Started
+
 
 ### ✅ Prerequisites
 
