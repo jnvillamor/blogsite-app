@@ -1,5 +1,6 @@
 from pydantic import Field, EmailStr, BaseModel, computed_field
 from typing import TYPE_CHECKING
+from datetime import datetime
 
 if TYPE_CHECKING:
   from .blog import BlogBase
@@ -35,6 +36,8 @@ class UserReference(UserBase):
 class UserRead(UserBase):
   id: int
   blogs: list["BlogBase"]
+  created_at: datetime
+  updated_at: datetime
 
   @computed_field
   @property
