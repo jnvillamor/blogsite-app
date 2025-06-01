@@ -1,4 +1,4 @@
-from .user import UserBase, UserCreate, UserRead
+from .user import UserBase, UserCreate, UserRead, UserReference
 from .token import TokenSchema, TokenPayload
 from .blog import BlogBase, BlogCreate, PaginatedBlogs, BlogRead
 

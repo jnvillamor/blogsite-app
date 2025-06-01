@@ -3,7 +3,7 @@ from datetime import datetime
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-  from .user import UserRead
+  from .user import UserReference
 
 class BlogBase(BaseModel):
   id: int
@@ -20,14 +20,14 @@ class BlogCreate(BaseModel):
   author_id: int = Field(..., gt=0)
 
 class BlogRead(BlogBase):
-  author: "UserRead"
+  author: "UserReference"
 
 class PaginatedBlogs(BaseModel):
   total: int
   page: int
   limit: int
   max_page: int
-  data: list[BlogBase]
+  data: list[BlogRead]
 
   model_config = { "from_attributes": True }
 

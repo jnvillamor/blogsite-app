@@ -20,6 +20,18 @@ class UserCreate(UserBase):
     'from_attributes': True,
   }
 
+class UserReference(UserBase):
+  id: int
+
+  @computed_field
+  @property
+  def full_name(self) -> str:
+    return f"{self.first_name} {self.last_name}"
+
+  model_config = {
+    'from_attributes': True,
+  }
+
 class UserRead(UserBase):
   id: int
   blogs: list["BlogBase"]
