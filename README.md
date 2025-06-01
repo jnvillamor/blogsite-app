@@ -5,12 +5,12 @@ A simple and modern blog site built with FastAPI, PostgreSQL, and a Next.js fron
 ---
 
 ## 📚 Table of Contents
-- [About](#about)
-- [Tech Stack](#tech-stack)
-- [Project Structure](#project-structure)
-- [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
+- [About](#-about)
+- [Tech Stack](#-tech-stack)
+- [Project Structure](#-project-structure)
+- [Getting Started](#-getting-started)
+  - [Prerequisites](#-prerequisites)
+  - [Installation](#-installation)
   - [Running the App](#running-the-app)
   - [Database Migrations](#database-migrations)
   - [Seeding Data](#seeding-data)
