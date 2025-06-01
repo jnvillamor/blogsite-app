@@ -71,3 +71,27 @@ async def get_blog(
     )
   
   return BlogBase.model_validate(blog).model_dump()
+
+@router.delete("/{blog_id}", status_code=status.HTTP_200_OK)
+async def delete_blog(
+  blog_id: int,
+  db: Session = Depends(get_db),
+  current_user: User = Depends(get_current_user)
+):
+  blog = db.query(Blog).filter(Blog.id == blog_id).first()
+  if not blog:
+    raise HTTPException(
+      status_code=status.HTTP_404_NOT_FOUND,
+      detail="Blog not found"
+    )
+  
+  if blog.author_id != current_user.id:
+    raise HTTPException(
+      status_code=status.HTTP_403_FORBIDDEN,
+      detail="You do not have permission to delete this blog"
+    )
+  
+  db.delete(blog)
+  db.commit()
+
+  return {"detail": "Blog deleted successfully"}
