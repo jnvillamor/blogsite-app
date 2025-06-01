@@ -57,3 +57,17 @@ async def get_blogs(
   )
 
   return paginated_blogs.model_dump()
+
+@router.get("/{blog_id}", response_model=BlogBase, status_code=status.HTTP_200_OK)
+async def get_blog(
+  blog_id: int,
+  db: Session = Depends(get_db)
+):
+  blog = db.query(Blog).filter(Blog.id == blog_id).first()
+  if not blog:
+    raise HTTPException(
+      status_code=status.HTTP_404_NOT_FOUND,
+      detail="Blog not found"
+    )
+  
+  return BlogBase.model_validate(blog).model_dump()
