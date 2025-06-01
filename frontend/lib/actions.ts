@@ -113,3 +113,41 @@ export const createBlogAction = async (data: z.infer<typeof CreateBlogSchema>) =
     }
   }
 }
+
+export const updateBlogAction = async (data: z.infer<typeof CreateBlogSchema>, blog_id: number) => {
+  const cookieStore = await cookies();
+  const token = cookieStore.get('access_token')?.value;
+
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+    "Authorization": `Bearer ${token}`,
+  };
+
+  try { 
+    const res = await fetch(`${API_ENDPOINT}/blogs/${blog_id}`, {
+      method: "PUT",
+      headers: headers,
+      body: JSON.stringify(data),
+    });
+
+    if (!res.ok) {
+      const errorData = await res.json();
+      return {
+        'error': true,
+        'message': errorData.detail || 'Failed to update blog post.'
+      }
+    }
+
+    return {
+      'error': false,
+      'message': 'Blog post updated successfully!'
+    };
+  } 
+  catch (error) {
+    console.error('Error updating blog post:', error);
+    return {
+      'error': true,
+      'message': 'Failed to update blog post. Please try again later.'
+    }
+  }
+}

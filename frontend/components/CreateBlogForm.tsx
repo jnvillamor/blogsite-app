@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -11,39 +11,54 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { CreateBlogSchema } from '@/lib/schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { createBlogAction } from '@/lib/actions';
+import { createBlogAction, updateBlogAction } from '@/lib/actions';
 import { toast } from 'sonner';
+import { BlogPost } from '@/types';
 
 type CreateBlogInputs = z.infer<typeof CreateBlogSchema>;
+type CreateBlogFormProps = {
+  current_user_id: number;
+  blogToEdit?: BlogPost;
+  isEditing?: boolean;
+};
 
-const CreateBlogForm = ({ current_user_id }: { current_user_id: number }) => {
-
+const CreateBlogForm = ({ current_user_id, blogToEdit, isEditing }: CreateBlogFormProps) => {
   const [isPreview, setIsPreview] = React.useState<boolean>(false);
-  
+
   const {
     register,
     handleSubmit,
     getValues,
     formState: { errors, isSubmitting }
   } = useForm<CreateBlogInputs>({
-    resolver: zodResolver(CreateBlogSchema)
+    resolver: zodResolver(CreateBlogSchema),
+    defaultValues: {
+      author_id: current_user_id,
+      title: blogToEdit?.title || '',
+      content: blogToEdit?.content || ''
+    }
   });
 
   const processForm: SubmitHandler<CreateBlogInputs> = async (data: CreateBlogInputs) => {
-    const res = await createBlogAction(data);
+    let res;
+
+    if (isEditing) {
+      res = await updateBlogAction(data, blogToEdit?.id || 0);
+    } else {
+      res = await createBlogAction(data);
+    }
 
     if (res.error) {
-      console.error('Login failed:', res.message);
-      toast.error(res.message || 'Login failed. Please try again.');
+      console.error(`${isEditing ? 'Editing' : 'Creating'} blog failed.`, res.message);
+      toast.error(res.message || `${isEditing ? 'Editing' : 'Creating'} blog failed.`);
       return;
     }
 
-    toast.success('Blog post created successfully!');
+    toast.success(`Blog post ${isEditing ? 'edited' : 'created'} successfully!`);
     setTimeout(() => {
       window.location.href = `/profile/${current_user_id}`;
     }, 750);
   };
-
 
   return (
     <form onSubmit={handleSubmit(processForm)} className='container mx-auto px-4 py-8 max-w-4xl'>
@@ -72,9 +87,9 @@ const CreateBlogForm = ({ current_user_id }: { current_user_id: number }) => {
             <CardDescription>Share your thoughts and knowledge with the community</CardDescription>
           </CardHeader>
           <CardContent className='space-y-6'>
-            <Input type='hidden' value={current_user_id} {...register('author_id', { valueAsNumber: true})} />
+            <Input type='hidden' value={current_user_id} {...register('author_id', { valueAsNumber: true })} />
             {errors.author_id && <p className='text-sm text-red-500'>{errors.author_id.message}</p>}
-            
+
             <div className='space-y-2'>
               <Label htmlFor='title'>Title</Label>
               <div>
@@ -113,6 +128,6 @@ const CreateBlogForm = ({ current_user_id }: { current_user_id: number }) => {
       )}
     </form>
   );
-}
+};
 
-export default CreateBlogForm
+export default CreateBlogForm;
