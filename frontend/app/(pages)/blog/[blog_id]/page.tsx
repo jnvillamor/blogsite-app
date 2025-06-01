@@ -6,6 +6,23 @@ import { ArrowLeft, User } from 'lucide-react';
 import Link from 'next/link';
 import React from 'react'
 
+export async function generateMetadata({ params }: { params: Promise<{ blog_id: number }> }) {
+  const blog_id = (await params).blog_id;
+  const blog: BlogPost | null = await getBlogPostById(blog_id);
+
+  if (!blog) {
+    return {
+      title: 'Post Not Found',
+      description: 'The blog post you are looking for does not exist.',
+    };
+  }
+
+  return {
+    title: blog.title,
+    description:'Read the full blog post.',
+  };
+}
+
 const BlogPage = async ({ params }: { params: Promise<{ blog_id: number }> }) => {
   const blog_id = (await params).blog_id;
   const blog: BlogPost = await getBlogPostById(blog_id);

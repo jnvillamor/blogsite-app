@@ -9,6 +9,26 @@ import { Calendar, Mail } from 'lucide-react';
 import Link from 'next/link';
 import React from 'react';
 
+export async function generateMetadata({ params }: { params: Promise<{ user_id: number }> }) {
+  const { user_id } = await params;
+  const user: User | null = await getUserById(user_id);
+  const current_user = await getCurrentSession();
+
+  if (!user) {
+    return {
+      title: 'User Not Found',
+      description: 'The user profile you are looking for does not exist.',
+    };
+  }
+  
+  const isOwner = current_user && user && current_user.id === user.id;
+
+  return {
+    title: `${isOwner ? "My" : user.full_name}'s Profile`,
+    description: `Profile of ${user.full_name}, a user on our platform.`,
+  };
+}
+
 const Profile = async ({ params }: { params: Promise<{ user_id: number }> }) => {
   const { user_id } = await params;
   const active_user: User | null = await getCurrentSession();

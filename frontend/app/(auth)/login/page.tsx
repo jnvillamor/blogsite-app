@@ -4,6 +4,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import React from 'react';
 
+export async function generateMetadata() {
+  return {
+    title: 'Login',
+    description: 'Login to your account or create a new one to access all features of Blog Post.',
+  }
+}
+
 const LoginPage = () => {
   return (
     <main className='max-w-lg mx-4 lg:mx-auto flex items-center justify-center min-h-[80vh]'>

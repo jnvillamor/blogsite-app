@@ -4,6 +4,23 @@ import CreateBlogForm from '@/components/CreateBlogForm';
 import Link from 'next/link';
 import React from 'react'
 
+export async function generateMetadata({ params }: { params: Promise<{ blog_id: number }> }) {
+  const { blog_id } = await params;
+  const blogPost = await getBlogPostById(blog_id);
+
+  if (!blogPost) {
+    return {
+      title: 'Blog Post Not Found',
+      description: 'The blog post you are trying to edit does not exist.',
+    };
+  }
+
+  return {
+    title: `Edit Blog Post: ${blogPost.title}`,
+    description: `Edit the blog post titled "${blogPost.title}".`,
+  };
+}
+
 const EditPage = async ({ params }: {params: Promise<{ blog_id: number}>}) => {
   const { blog_id } = await params;
   const blogToEdit = await getBlogPostById(blog_id);
