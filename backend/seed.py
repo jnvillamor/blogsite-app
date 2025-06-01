@@ -3,6 +3,7 @@ from app.models import User, Blog
 from sqlalchemy.orm import Session
 from app.utils.hashing import hash_password
 from faker import Faker
+from random import randint
 
 fake = Faker()
 
@@ -41,8 +42,8 @@ def seed():
   for user in users:
     for _ in range(5):
       blog = Blog(
-        title=fake.sentence(nb_words=15, variable_nb_words=True),
-        content=fake.paragraphs(nb=7),
+        title=fake.sentence(nb_words=7, variable_nb_words=True),
+        content='\n\n'.join(fake.paragraph(nb_sentences=randint(8, 12), variable_nb_sentences=True) for _ in range(5)),
         author_id=user.id
       )
       blogs.append(blog)
