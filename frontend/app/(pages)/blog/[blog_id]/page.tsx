@@ -53,7 +53,7 @@ const BlogPage = async ({ params }: { params: Promise<{ blog_id: number }> }) =>
         <div>
           <h3 className='font-semibold mb-1'>About the Author</h3>
           <p className='text-muted-foreground'>
-            <Link href='/profile/john-doe' className='hover:underline'>
+            <Link href={`/profile/${blog.author.id}`} className='hover:underline'>
               {blog.author.full_name}
             </Link>
           </p>
