@@ -66,6 +66,14 @@ export const loginAction = async (data: z.infer<typeof LoginSchema>) => {
   redirect('/');
 }
 
+export const logoutAction = async () => {
+  const cookieStore = await cookies();
+  cookieStore.delete('access_token');
+  cookieStore.delete('refresh_token');
+
+  redirect('/login');
+}
+
 export const createBlogAction = async (data: z.infer<typeof CreateBlogSchema>) => {
   const cookieStore = await cookies();
   const token = cookieStore.get('access_token')?.value;

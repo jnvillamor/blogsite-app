@@ -1,6 +1,9 @@
 import { getCurrentSession } from '@/app/api/auth';
 import { User } from '@/types';
 import Link from 'next/link';
+import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
+import { Avatar, AvatarFallback } from './ui/avatar';
+import LogoutButton from './LogoutButton';
 
 const Header = async () => {
   const user: User | null = await getCurrentSession();
@@ -20,12 +23,21 @@ const Header = async () => {
               Write
             </Link>
             {user ? (
-              <>
-                <Link href='/dashboard' className='text-sm hover:underline'>
-                  Dashboard
-                </Link>
-                <h1 className='text-sm'>Welcome! {user.first_name}</h1>
-              </>
+              <Popover>
+                <PopoverTrigger>
+                  <Avatar>
+                    <AvatarFallback>{user.first_name.charAt(0).toUpperCase()}</AvatarFallback>
+                  </Avatar>
+                </PopoverTrigger>
+                <PopoverContent className='w-48'>
+                  <div className='flex flex-col space-y-2'>
+                    <Link href={`/profile/${user.id}`} className='text-sm hover:underline'>
+                      Profile
+                    </Link>
+                    <LogoutButton />
+                  </div>
+                </PopoverContent>
+              </Popover>
             ) : (
               <Link href='/login' className='text-sm hover:underline'>
                 Login
