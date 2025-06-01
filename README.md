@@ -6,7 +6,7 @@ A simple and modern blog site built with FastAPI, PostgreSQL, and a Next.js fron
 
 ## 📚 Table of Contents
 - [About](#-about)
-- [Tech Stack](#-tech_stack)
+- [Tech Stack](#-tech-stack)
 - [Project Structure](#-project-structure)
 - [Getting Started](#-getting-started)
   - [Prerequisites](#-prerequisites)
