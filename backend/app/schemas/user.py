@@ -18,9 +18,7 @@ class UserCreate(UserBase):
   }
 
 class UserRead(UserBase):
-  id: int 
-  created_at: datetime
-  updated_at: datetime
+  id: int
 
   @computed_field
   @property
@@ -29,19 +27,4 @@ class UserRead(UserBase):
 
   model_config = {
     'from_attributes': True,
-  }
-
-class Author(BaseModel):
-  id: int
-  first_name: str
-  last_name: str
-  email: EmailStr
-
-  @computed_field
-  @property
-  def full_name(self) -> str:
-      return f"{self.first_name} {self.last_name}"
-
-  model_config = {
-    "from_attributes": True,
   }
