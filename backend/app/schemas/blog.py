@@ -1,11 +1,14 @@
 from pydantic import BaseModel, Field, computed_field
 from app.schemas import UserRead
+from datetime import datetime
 
 class BlogBase(BaseModel):
   id: int
   title: str
   content: str
   author: UserRead
+  created_at: datetime
+  updated_at: datetime
 
   model_config = { "from_attributes": True }
 
@@ -20,7 +23,7 @@ class PaginatedBlogs(BaseModel):
   page: int
   limit: int
   max_page: int
-  blogs: list[BlogBase]
+  data: list[BlogBase]
 
   model_config = { "from_attributes": True }
 

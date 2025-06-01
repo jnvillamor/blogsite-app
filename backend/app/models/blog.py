@@ -1,6 +1,7 @@
-from sqlalchemy import Column, Integer, String, Text, ForeignKey
+from sqlalchemy import Column, Integer, String, Text, ForeignKey, DateTime, func
 from app.core.database import Base
 from sqlalchemy.orm import relationship
+from datetime import datetime, timezone
 
 class Blog(Base):
   __tablename__ = "blogs"
@@ -9,6 +10,8 @@ class Blog(Base):
   title = Column(String(255), nullable=False)
   content = Column(Text, nullable=False)
   author_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+  created_at = Column(DateTime, default=datetime.now(timezone.utc), nullable=False)
+  updated_at = Column(DateTime, default=datetime.now(timezone.utc), onupdate=datetime.now(timezone.utc), nullable=False)
 
   author = relationship("User", back_populates="blogs")
 

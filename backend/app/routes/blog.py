@@ -53,7 +53,7 @@ async def get_blogs(
     page=page,
     limit=limit,
     max_page=max_page,
-    blogs=[BlogBase.model_validate(blog).model_dump() for blog in blogs]
+    data=[BlogBase.model_validate(blog).model_dump() for blog in blogs]
   )
 
   return paginated_blogs.model_dump()
