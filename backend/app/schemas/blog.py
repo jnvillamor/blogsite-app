@@ -1,12 +1,14 @@
 from pydantic import BaseModel, Field, computed_field
-from app.schemas import UserRead
 from datetime import datetime
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+  from .user import UserRead
 
 class BlogBase(BaseModel):
   id: int
   title: str
   content: str
-  author: UserRead
   created_at: datetime
   updated_at: datetime
 
@@ -17,6 +19,8 @@ class BlogCreate(BaseModel):
   content: str = Field(..., min_length=1)
   author_id: int = Field(..., gt=0)
 
+class BlogRead(BlogBase):
+  author: "UserRead"
 
 class PaginatedBlogs(BaseModel):
   total: int

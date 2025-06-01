@@ -1,5 +1,8 @@
 from pydantic import Field, EmailStr, BaseModel, computed_field
-from datetime import datetime
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+  from .blog import BlogBase
 
 class UserBase(BaseModel):
   email: EmailStr = Field(..., max_length=100)
@@ -19,11 +22,17 @@ class UserCreate(UserBase):
 
 class UserRead(UserBase):
   id: int
+  blogs: list["BlogBase"]
 
   @computed_field
   @property
   def full_name(self) -> str:
     return f"{self.first_name} {self.last_name}"
+  
+  @computed_field
+  @property
+  def blog_count(self) -> int:
+    return len(self.blogs) if hasattr(self, 'blogs') and self.blogs is not None else 0
 
   model_config = {
     'from_attributes': True,
