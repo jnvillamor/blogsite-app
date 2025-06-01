@@ -83,7 +83,7 @@ const CreateBlogForm = ({ current_user_id, blogToEdit, isEditing }: CreateBlogFo
       {!isPreview ? (
         <Card>
           <CardHeader>
-            <CardTitle>Write New Post</CardTitle>
+            <CardTitle>{isEditing ? "Edit" : "Write New"} Post</CardTitle>
             <CardDescription>Share your thoughts and knowledge with the community</CardDescription>
           </CardHeader>
           <CardContent className='space-y-6'>
@@ -119,8 +119,8 @@ const CreateBlogForm = ({ current_user_id, blogToEdit, isEditing }: CreateBlogFo
             <CardDescription>This is how your post will appear to readers</CardDescription>
           </CardHeader>
           <CardContent>
-            <article className='prose prose-gray dark:prose-invert max-w-none'>
-              <h1>{getValues('title') || 'Untitled Post'}</h1>
+            <article>
+              <h1 className='text-4xl mb-8 font-bold'>{getValues('title') || 'Untitled Post'}</h1>
               <div className='whitespace-pre-line'>{getValues('content') || 'No content yet. Start writing to see the preview.'}</div>
             </article>
           </CardContent>
