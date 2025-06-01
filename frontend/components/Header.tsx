@@ -16,7 +16,7 @@ const Header = async () => {
             <Link href='/' className='text-sm hover:underline'>
               Home
             </Link>
-            <Link href='/about' className='text-sm hover:underline'>
+            <Link href='/write' className='text-sm hover:underline'>
               Write
             </Link>
             {user ? (
