@@ -29,7 +29,7 @@ const OwnerButton = ({ blog_id }: { blog_id: number }) => {
   };
 
   return (
-    <div className='space-x-4'>
+    <div className='flex items-center space-x-4'>
       <Link href={`/blog/edit/${blog_id}`} className='text-sm text-blue-500 hover:underline ml-2'>
         <Button variant={'outline'} size={'sm'} className='inline-flex items-center gap-1'>
           <PenIcon className='h-4 w-4' />

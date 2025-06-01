@@ -81,13 +81,13 @@ const Profile = async ({ params }: { params: Promise<{ user_id: number }> }) => 
                 {user.blogs.map((post) => (
                   <Card key={post.id} className='hover:shadow-lg transition-shadow'>
                     <CardHeader>
-                      <CardTitle className='line-clamp-2 flex items-ceenter justify-between'>
-                        <Link href={`/blog/${post.id}`} className='hover:underline'>
-                          {post.title}
-                        </Link>
-                        {isOwner && (
-                          <OwnerButton blog_id={post.id} />
-                        )}
+                      <CardTitle className='flex items-center justify-between'>
+                        <div className='line-clamp-2 '>
+                          <Link href={`/blog/${post.id}`} className='hover:underline'>
+                            {post.title}
+                          </Link>
+                        </div>
+                        <div>{isOwner && <OwnerButton blog_id={post.id} />}</div>
                       </CardTitle>
                       <CardDescription className='line-clamp-3'>{post.content}</CardDescription>
                     </CardHeader>
