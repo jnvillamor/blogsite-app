@@ -4,7 +4,7 @@ import { Separator } from '@/components/ui/separator';
 import { BlogPost } from '@/types';
 import { ArrowLeft, User } from 'lucide-react';
 import Link from 'next/link';
-import React from 'react'
+import React from 'react';
 
 export async function generateMetadata({ params }: { params: Promise<{ blog_id: number }> }) {
   const blog_id = (await params).blog_id;
@@ -13,13 +13,13 @@ export async function generateMetadata({ params }: { params: Promise<{ blog_id: 
   if (!blog) {
     return {
       title: 'Post Not Found',
-      description: 'The blog post you are looking for does not exist.',
+      description: 'The blog post you are looking for does not exist.'
     };
   }
 
   return {
     title: blog.title,
-    description:'Read the full blog post.',
+    description: 'Read the full blog post.'
   };
 }
 
@@ -49,6 +49,7 @@ const BlogPage = async ({ params }: { params: Promise<{ blog_id: number }> }) =>
       </Button>
 
       <article className='prose prose-gray dark:prose-invert max-w-none'>
+        <h1 className='text-4xl font-bold mb-4'>{blog.title}</h1>
         <div className='not-prose mb-8'>
           <div className='flex items-center gap-4 text-muted-foreground mb-6'>
             <div className='flex items-center gap-1'>
