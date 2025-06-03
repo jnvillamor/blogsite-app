@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from app.models import Comment, Blog, User
 from app.core.database import get_db
-from app.schemas.comment import CommentCreate, CommentResponse
+from app.schemas.comment import CommentCreate, CommentResponse, CommentFetchResponse
 from app.dependencies.deps import get_current_user
 
 router = APIRouter(
@@ -17,7 +17,7 @@ async def create_comment(
   db: Session = Depends(get_db)
 ):
   try:
-    print("(/comment) is running.", flush=True)
+    print("(/comment [POST]) is running.", flush=True)
     blog = db.query(Blog).filter(Blog.id == comment.blog_id).first()
     if not blog:
       raise HTTPException(
@@ -41,13 +41,33 @@ async def create_comment(
     db.commit()
     db.refresh(new_comment)
 
-    print("(/comment) is done.", flush=True) 
+    print("(/comment [POST]) is done.", flush=True) 
     return CommentResponse.model_validate(new_comment).model_dump()
   except HTTPException as http_exc:
     raise http_exc
   except Exception as e:
     print(f"Error in create_comment: {e}", flush=True)
+    print("(/comment [POST]) is done with error.", flush=True)
     raise HTTPException(
       status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
       detail="An error occurred while creating the comment"
+    )
+
+@router.get("/", response_model=list[CommentFetchResponse], status_code=status.HTTP_200_OK)
+async def get_comments(
+  blog_id: int, 
+  db: Session = Depends(get_db)
+):
+  try:
+    print("(/comments [GET]) is running.", flush=True)
+    comments = db.query(Comment).filter(Comment.blog_id == blog_id).all() 
+
+    print("(/comments [GET]) is done.", flush=True)
+    return [CommentFetchResponse.model_validate(comment).model_dump() for comment in comments]
+  except Exception as e:
+    print(f"Error in get_comments: {e}", flush=True)
+    print("(/comments [GET]) is done with error.", flush=True)
+    raise HTTPException(
+      status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+      detail="An error occurred while fetching comments"
     )
