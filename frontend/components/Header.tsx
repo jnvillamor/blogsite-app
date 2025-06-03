@@ -1,9 +1,9 @@
-import { getCurrentSession } from '@/app/api/auth';
 import { User } from '@/types';
 import Link from 'next/link';
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
 import { Avatar, AvatarFallback } from './ui/avatar';
 import LogoutButton from './LogoutButton';
+import { getCurrentSession } from '@/lib/api/auth';
 
 const Header = async () => {
   const user: User | null = await getCurrentSession();

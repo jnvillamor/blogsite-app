@@ -1,5 +1,5 @@
-import { getCurrentSession } from '@/app/api/auth';
 import CreateBlogForm from '@/components/CreateBlogForm';
+import { getCurrentSession } from '@/lib/api/auth';
 import Link from 'next/link';
 import React from 'react';
 

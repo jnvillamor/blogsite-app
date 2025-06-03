@@ -1,10 +1,10 @@
 import { BlogPost, PaginatedResponse } from '@/types';
-import { getBlogPosts } from '../api/blog';
 import BlogCard from '@/components/BlogCard';
 import { Separator } from '@/components/ui/separator';
 import PaginationButtons from '@/components/PaginationButtons';
 import Filters from '@/components/Filters';
 import Link from 'next/link';
+import { getBlogPosts } from '@/lib/api/blog';
 
 export default async function Home({ searchParams }: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) {
   const page = (await searchParams).page || '1';

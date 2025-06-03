@@ -1,6 +1,6 @@
-import { getBlogPostById } from '@/app/api/blog';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
+import { getBlogPostById } from '@/lib/api/blog';
 import { BlogPost } from '@/types';
 import { ArrowLeft, User } from 'lucide-react';
 import Link from 'next/link';
