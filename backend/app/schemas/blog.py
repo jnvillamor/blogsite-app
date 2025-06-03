@@ -1,7 +1,7 @@
 from pydantic import BaseModel, Field, computed_field
 from datetime import datetime
 from .user import UserProfile
-
+from .comment import CommentFetchResponse
 
 class BlogBase(BaseModel):
   title: str
@@ -15,6 +15,12 @@ class BlogResponse(BlogBase):
   author: UserProfile
   created_at: datetime
   updated_at: datetime
+  comments: list[CommentFetchResponse]
+
+  @computed_field
+  @property
+  def comment_count(self) -> int:
+    return len(self.comments)
 
   model_config = {
     'from_attributes': True,
