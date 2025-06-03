@@ -108,3 +108,43 @@ async def delete_comment(
       status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
       detail="An error occurred while deleting the comment"
     )
+
+@router.put("/{comment_id}", response_model=CommentResponse, status_code=status.HTTP_200_OK)
+async def update_comment(
+  comment_id: int,
+  updated_comment: CommentCreate,
+  current_user: User = Depends(get_current_user),
+  db: Session = Depends(get_db)
+):
+  print("(/comment [PUT]) is running.", flush=True)
+  try:
+    comment_query = db.query(Comment)
+    comment = comment_query.filter(Comment.id == comment_id).first()
+    if not comment:
+      raise HTTPException(
+        status_code=status.HTTP_404_NOT_FOUND,
+        detail="Comment not found"
+      )
+    
+    if comment.author_id != current_user.id:
+      raise HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="You do not have permission to update this comment"
+      )
+    
+    comment_query.filter(Comment.id == comment_id).update(updated_comment.model_dump(), synchronize_session=False)
+    db.commit()
+    db.refresh(comment)
+
+    print("(/comment [PUT]) is done.", flush=True)
+    return CommentResponse.model_validate(comment).model_dump()
+
+  except HTTPException as http_exc:
+    raise http_exc
+  except Exception as e:
+    print(f"Error in update_comment: {e}", flush=True)
+    print("(/comment [PUT]) is done with error.", flush=True)
+    raise HTTPException(
+      status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+      detail="An error occurred while updating the comment"
+    )
