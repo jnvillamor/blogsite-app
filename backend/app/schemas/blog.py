@@ -16,33 +16,37 @@ class BlogResponse(BlogBase):
   created_at: datetime
   updated_at: datetime
 
+  model_config = {
+    'from_attributes': True,
+  }
+
 class PaginatedBlogs(BaseModel):
   total: int
-  blogs: list[BlogResponse]
-  max_pages: int
-  current_page: int
+  data: list[BlogResponse]
+  max_page: int
+  page: int
+  limit: int
 
   @computed_field
   @property
   def has_next(self) -> bool:
-    return self.current_page < self.max_pages
+    return self.page < self.max_page
   
   @computed_field
   @property
   def has_previous(self) -> bool:
-    return self.current_page > 1
+    return self.page > 1
   
   @computed_field
   @property
   def next_page(self) -> int | None:
-    return self.current_page + 1 if self.has_next else None
+    return self.page + 1 if self.has_next else None
   
   @computed_field
   @property
   def previous_page(self) -> int | None:
-    return self.current_page - 1 if self.has_previous else None
+    return self.page - 1 if self.has_previous else None
   
   model_config = {
     'from_attributes': True,
-    'populate_by_name': True,
   }

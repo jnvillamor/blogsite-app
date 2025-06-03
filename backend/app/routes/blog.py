@@ -55,6 +55,7 @@ async def get_blogs(
     total = blogs.count()
     blogs = blogs.offset(offset).limit(limit).all()
     max_page = ceil(total / limit) if total > 0 else 1
+    print(blogs, flush=True)
 
     paginated_blogs = PaginatedBlogs(
       total=total,
