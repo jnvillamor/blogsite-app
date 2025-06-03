@@ -24,8 +24,8 @@ export interface PaginatedResponse<T> {
   page: number;
   limit: number;
   has_next: boolean;
-  has_prev: boolean;
-  next?: number;
-  prev?: number;
+  has_previous: boolean;
+  next_page?: number;
+  previous_page?: number;
   max_page: number;
 }
