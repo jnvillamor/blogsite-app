@@ -14,6 +14,7 @@ class Blog(Base):
   updated_at = Column(DateTime, default=datetime.now(timezone.utc), onupdate=datetime.now(timezone.utc), nullable=False)
 
   author = relationship("User", back_populates="blogs")
+  comments = relationship("Comment", back_populates="blog") 
 
   def __repr__(self):
     return f"<Blog(id={self.id}, title={self.title}, author_id={self.author_id})>"

@@ -8,7 +8,7 @@ class Comment(Base):
 
   id = Column(Integer, primary_key=True, index=True)
   content = Column(String, nullable=False)
-  blog_id = Column(Integer, ForeignKey('posts.id', ondelete='CASCADE'), index=True, nullable=False)
+  blog_id = Column(Integer, ForeignKey('blogs.id', ondelete='CASCADE'), index=True, nullable=False)
   author_id = Column(Integer, ForeignKey('users.id', ondelete='CASCADE'), index=True, nullable=False)
   created_at = Column(DateTime, default=datetime.now(timezone.utc), nullable=False)
   updated_at = Column(DateTime, default=datetime.now(timezone.utc), onupdate=datetime.now(timezone.utc), nullable=False)
