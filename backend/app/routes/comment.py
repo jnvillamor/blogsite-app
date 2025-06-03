@@ -71,3 +71,40 @@ async def get_comments(
       status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
       detail="An error occurred while fetching comments"
     )
+
+@router.delete("/{comment_id}")
+async def delete_comment(
+  comment_id: int,
+  current_user: User = Depends(get_current_user),
+  db: Session = Depends(get_db)
+):
+  print("(/comment [DELETE]) is running.", flush=True)
+  try:
+    comment = db.query(Comment).filter(Comment.id == comment_id).first()
+    if not comment:
+      raise HTTPException(
+        status_code=status.HTTP_404_NOT_FOUND,
+        detail="Comment not found"
+      )
+    
+    if comment.author_id != current_user.id:
+      raise HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="You do not have permission to delete this comment"
+      )
+
+    db.delete(comment)
+    db.commit()
+
+    print("(/comment [DELETE]) is done.", flush=True)
+    return {"detail": "Comment deleted successfully"}
+
+  except HTTPException as http_exc:
+    raise http_exc
+  except Exception as e:
+    print(f"Error in delete_comment: {e}", flush=True)
+    print("(/comment [DELETE]) is done with error.", flush=True)
+    raise HTTPException(
+      status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+      detail="An error occurred while deleting the comment"
+    )
