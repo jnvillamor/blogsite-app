@@ -17,4 +17,4 @@ class Comment(Base):
   author = relationship("User", back_populates="comments")
 
   def __repr__(self):
-    return f"<Comment(id={self.id}, content={self.content}, post_id={self.post_id}, author_id={self.author_id})>"
+    return f"<Comment(id={self.id}, content={self.content}, post_id={self.blog_id}, author_id={self.author_id})>"
