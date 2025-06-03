@@ -1,8 +1,9 @@
+import CommentsSection from '@/components/CommentsSection';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { getBlogPostById } from '@/lib/api/blog';
 import { BlogPost } from '@/types';
-import { ArrowLeft, User } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import React from 'react';
 
@@ -49,37 +50,28 @@ const BlogPage = async ({ params }: { params: Promise<{ blog_id: number }> }) =>
       </Button>
 
       <article className='prose prose-gray dark:prose-invert max-w-none'>
+
+        {/* Title and Author */}
         <h1 className='text-4xl font-bold mb-4'>{blog.title}</h1>
         <div className='not-prose mb-8'>
           <div className='flex items-center gap-4 text-muted-foreground mb-6'>
-            <div className='flex items-center gap-1'>
-              <User className='h-4 w-4' />
-              <span>{blog.author.full_name}</span>
-            </div>
+            <Link href={`/user/${blog.author.id}`} className='hover:underline'>
+              By {blog.author.first_name} {blog.author.last_name}
+            </Link>
+            <span>•</span>
             <span>{new Date(blog.created_at).toLocaleDateString()}</span>
           </div>
-
           <Separator className='mb-8' />
         </div>
 
+        {/* Blog Content */}
         <div className='whitespace-pre-line leading-relaxed'>{blog.content}</div>
       </article>
 
       <Separator className='my-8' />
 
-      <div className='flex justify-between items-center'>
-        <div>
-          <h3 className='font-semibold mb-1'>About the Author</h3>
-          <p className='text-muted-foreground'>
-            <Link href={`/profile/${blog.author.id}`} className='hover:underline'>
-              {blog.author.full_name}
-            </Link>
-          </p>
-        </div>
-        <Button asChild variant='outline'>
-          <Link href={`/profile/${blog.author.id}`}>View Profile</Link>
-        </Button>
-      </div>
+      {/* Comments Section */}
+      <CommentsSection comments={blog.comments} comment_count={blog. comment_count} blog_id={blog_id}/>
     </div>
   );
 };

@@ -10,12 +10,23 @@ export interface User {
   blog_count: number;
 }
 
+export interface Comment {
+  id: number;
+  content: string;
+  author: User;
+  blog_id: number;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface BlogPost {
   id: number;
   title: string;
   content: string;
   created_at: string;
   author: User;
+  comments: Comment[];
+  comment_count: number;
 }
 
 export interface PaginatedResponse<T> {

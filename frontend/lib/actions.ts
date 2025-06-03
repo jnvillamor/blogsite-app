@@ -1,7 +1,7 @@
 'use server';
 
 import { z } from "zod";
-import { CreateBlogSchema, LoginSchema, SignupSchema } from "./schema";
+import { CommentSchema, CreateBlogSchema, LoginSchema, SignupSchema } from "./schema";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -148,6 +148,47 @@ export const updateBlogAction = async (data: z.infer<typeof CreateBlogSchema>, b
     return {
       'error': true,
       'message': 'Failed to update blog post. Please try again later.'
+    }
+  }
+}
+
+export const createCommentAction = async (data: z.infer<typeof CommentSchema>, blog_id: number) => {
+  const cookieStore = await cookies();
+  const token = cookieStore.get('access_token')?.value;
+
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+    "Authorization": `Bearer ${token}`,
+  };
+
+  try {
+    const res = await fetch(`${API_ENDPOINT}/comments`, {
+      method: "POST",
+      headers: headers,
+      body: JSON.stringify({
+        content: data.content,
+        blog_id: blog_id,
+        author_id: data.author_id
+      }),
+    });
+
+    if (!res.ok) {
+      const errorData = await res.json();
+      return {
+        'error': true,
+        'message': errorData.detail || 'Failed to create comment.'
+      }
+    }
+
+    return {
+      'error': false,
+      'message': 'Comment created successfully!'
+    };
+  } catch (error) {
+    console.error('Error creating comment:', error);
+    return {
+      'error': true,
+      'message': 'Failed to create comment. Please try again later.'
     }
   }
 }

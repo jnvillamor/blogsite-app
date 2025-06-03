@@ -33,3 +33,9 @@ export const CreateBlogSchema = z.object({
   content: z.string().nonempty('Content is required').max(5000, 'Content must be at most 5000 characters long.'),
   author_id: z.number().int().positive('Author ID must be a positive integer')
 })
+
+export const CommentSchema = z.object({
+  content: z.string().nonempty('Content is required').max(1000, 'Content must be at most 1000 characters long.'),
+  blog_id: z.number().int().positive('Blog ID must be a positive integer'),
+  author_id: z.number().int().positive('Author ID must be a positive integer')
+})
