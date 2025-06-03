@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from app.core.database import get_db
 from app.models import Blog, User
-from app.schemas import BlogCreate, PaginatedBlogs, BlogRead
+from app.schemas import BlogCreate, PaginatedBlogs, BlogResponse 
 from app.dependencies import get_current_user
 from math import ceil
 from typing import Optional
@@ -12,7 +12,7 @@ router = APIRouter(
   tags=["blogs"],
 )
 
-@router.post("/", response_model=BlogRead, status_code=status.HTTP_201_CREATED)
+@router.post("/", response_model=BlogResponse, status_code=status.HTTP_201_CREATED)
 async def create_blog(
   blog: BlogCreate,
   db: Session = Depends(get_db),
@@ -36,7 +36,7 @@ async def create_blog(
   db.commit()
   db.refresh(new_blog)
 
-  return BlogRead.model_validate(new_blog).model_dump()
+  return BlogResponse.model_validate(new_blog).model_dump()
 
 @router.get("/", response_model=PaginatedBlogs)
 async def get_blogs(
@@ -61,14 +61,14 @@ async def get_blogs(
       page=page,
       limit=limit,
       max_page=max_page,
-      data=[BlogRead.model_validate(blog).model_dump() for blog in blogs]
+      data=[BlogResponse.model_validate(blog).model_dump() for blog in blogs]
     )
 
     return paginated_blogs.model_dump()
   except Exception as e:
     print(f"Error fetching blogs: {e}", flush=True)
 
-@router.get("/{blog_id}", response_model=BlogRead, status_code=status.HTTP_200_OK)
+@router.get("/{blog_id}", response_model=BlogResponse, status_code=status.HTTP_200_OK)
 async def get_blog(
   blog_id: int,
   db: Session = Depends(get_db)
@@ -80,7 +80,7 @@ async def get_blog(
       detail="Blog not found"
     )
   
-  return BlogRead.model_validate(blog).model_dump()
+  return BlogResponse.model_validate(blog).model_dump()
 
 @router.delete("/{blog_id}", status_code=status.HTTP_200_OK)
 async def delete_blog(
@@ -106,7 +106,7 @@ async def delete_blog(
 
   return {"detail": "Blog deleted successfully"}
 
-@router.put("/{blog_id}", response_model=BlogRead, status_code=status.HTTP_200_OK)
+@router.put("/{blog_id}", response_model=BlogResponse, status_code=status.HTTP_200_OK)
 async def update_blog(
   blog: BlogCreate,
   blog_id: int,
@@ -130,5 +130,5 @@ async def update_blog(
   db.commit()
   db.refresh(existing_blog)
 
-  return BlogRead.model_validate(existing_blog).model_dump()
+  return BlogResponse.model_validate(existing_blog).model_dump()
   

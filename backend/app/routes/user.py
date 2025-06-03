@@ -1,6 +1,6 @@
 from app.core.database import get_db
 from app.models.user import User
-from app.schemas import UserBase, UserCreate, UserRead, TokenSchema
+from app.schemas import UserCreate, UserDetails, UserProfile, TokenSchema
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from app.utils import hash_password, verify_password, create_access_token, create_refresh_token
@@ -28,16 +28,16 @@ async def create_user(user: UserCreate, db: Session =Depends(get_db)):
   db.commit()
   db.refresh(new_user)
 
-  return UserRead.model_validate(new_user).model_dump()
+  return UserProfile.model_validate(new_user).model_dump()
   
-@router.get('/users/{user_id}', response_model=UserRead, status_code=status.HTTP_200_OK)
+@router.get('/users/{user_id}', response_model=UserDetails, status_code=status.HTTP_200_OK)
 def get_user(user_id: int, db: Session = Depends(get_db)):
   user = db.query(User).filter(User.id == user_id).first()
   
   if not user:
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
   
-  return UserRead.model_validate(user).model_dump()
+  return UserDetails.model_validate(user).model_dump()
 
 @router.post("/login", response_model=TokenSchema, status_code=status.HTTP_200_OK)
 async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
@@ -54,6 +54,6 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = 
     refresh_token=create_refresh_token(user.id)
   ).model_dump()
 
-@router.get("/me", response_model=UserRead, status_code=status.HTTP_200_OK)
+@router.get("/me", response_model=UserProfile, status_code=status.HTTP_200_OK)
 async def get_me(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
-  return UserRead.model_validate(current_user).model_dump()
+  return UserProfile.model_validate(current_user).model_dump()

@@ -1,52 +1,48 @@
 from pydantic import BaseModel, Field, computed_field
 from datetime import datetime
-from typing import TYPE_CHECKING
+from .user import UserProfile
 
-if TYPE_CHECKING:
-  from .user import UserReference
 
 class BlogBase(BaseModel):
-  id: int
   title: str
   content: str
+
+class BlogCreate(BlogBase):
+  author_id: int 
+
+class BlogResponse(BlogBase):
+  id: int
+  author: UserProfile
   created_at: datetime
   updated_at: datetime
 
-  model_config = { "from_attributes": True }
-
-class BlogCreate(BaseModel):
-  title: str = Field(..., min_length=1, max_length=255)
-  content: str = Field(..., min_length=1)
-  author_id: int = Field(..., gt=0)
-
-class BlogRead(BlogBase):
-  author: "UserReference"
-
 class PaginatedBlogs(BaseModel):
   total: int
-  page: int
-  limit: int
-  max_page: int
-  data: list[BlogRead]
-
-  model_config = { "from_attributes": True }
+  blogs: list[BlogResponse]
+  max_pages: int
+  current_page: int
 
   @computed_field
   @property
   def has_next(self) -> bool:
-    return self.page < self.max_page
-
+    return self.current_page < self.max_pages
+  
   @computed_field
   @property
-  def has_prev(self) -> bool:
-    return self.page > 1
+  def has_previous(self) -> bool:
+    return self.current_page > 1
   
   @computed_field
   @property
   def next_page(self) -> int | None:
-    return self.page + 1 if self.has_next else None
+    return self.current_page + 1 if self.has_next else None
   
   @computed_field
   @property
-  def prev_page(self) -> int | None:
-    return self.page - 1 if self.has_prev else None
+  def previous_page(self) -> int | None:
+    return self.current_page - 1 if self.has_previous else None
+  
+  model_config = {
+    'from_attributes': True,
+    'populate_by_name': True,
+  }

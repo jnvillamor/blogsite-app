@@ -1,6 +1,3 @@
-from .user import UserBase, UserCreate, UserRead, UserReference
+from .user import UserBase, UserCreate, UserProfile, UserDetails 
 from .token import TokenSchema, TokenPayload
-from .blog import BlogBase, BlogCreate, PaginatedBlogs, BlogRead
-
-UserRead.model_rebuild()
-BlogRead.model_rebuild()
+from .blog import BlogBase, BlogCreate, BlogResponse, PaginatedBlogs
