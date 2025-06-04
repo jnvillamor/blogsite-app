@@ -27,7 +27,7 @@ const CommentsSection = async ({ comments, comment_count, blog_id }: Props) => {
       <div className='space-y-4'>
         {comment_count > 0 ? (
           comments.map((comment) => (
-            <CommentCard key={comment.id} comment={comment} />
+            <CommentCard key={comment.id} comment={comment} current_user={current_user} />
           ))
         ): (
           <p className='text-muted-foreground'>No comments yet. Be the first to comment!</p>

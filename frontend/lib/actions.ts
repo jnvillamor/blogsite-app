@@ -192,3 +192,39 @@ export const createCommentAction = async (data: z.infer<typeof CommentSchema>, b
     }
   }
 }
+
+export const updateCommentAction = async (data: z.infer<typeof CommentSchema>, comment_id: number) => {
+  const cookieStore = await cookies();
+  const token = cookieStore.get('access_token')?.value;
+
+  try {
+    const res = await fetch(`${API_ENDPOINT}/comments/${comment_id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+      },
+      body: JSON.stringify(data),
+      credentials: "include",
+    });
+
+    if (!res.ok) {
+      const errorData = await res.json();
+      return {
+        'error': true,
+        'message': errorData.detail || 'Failed to update comment.'
+      }
+    }
+
+    return {
+      'error': false,
+      'message': 'Comment updated successfully!'
+    };
+  } catch (error) {
+    console.error('Error updating comment:', error);
+    return {
+      'error': true,
+      'message': 'Failed to update comment. Please try again later.'
+    }
+  }
+}

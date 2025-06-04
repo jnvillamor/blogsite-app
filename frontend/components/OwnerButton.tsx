@@ -4,8 +4,8 @@ import Link from 'next/link';
 import React from 'react';
 import { Button } from './ui/button';
 import { PenIcon, Trash2Icon } from 'lucide-react';
-import { deleteBlogPost } from '@/app/api/blog';
 import { toast } from 'sonner';
+import { deleteBlogPost } from '@/lib/api/blog';
 
 const OwnerButton = ({ blog_id }: { blog_id: number }) => {
   const [deleting, setDeleting] = React.useState<boolean>(false);
